@@ -1,3 +1,5 @@
+var userName = 'ChangeThis';
+
 $(function(){
   var input = $('#input');
   // var connection = new WebSocket('ws://ecv-etic.upf.edu:9034'); // Descomentar al server machine
@@ -5,6 +7,7 @@ $(function(){
 
   connection.onopen = () => {
     console.log('Connection is open and ready to use');
+    connection.send(userName);
   };
 
   connection.onerror = (err) => {
@@ -18,6 +21,7 @@ $(function(){
       console.log('This doesnt look like valid JSON');
       return;
     }
+    console.log('Received message');
     console.log(json);
   };
 
