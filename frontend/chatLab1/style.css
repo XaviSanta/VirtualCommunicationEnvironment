@@ -1,0 +1,186 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  background: rgb(2,0,36);
+  background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(0,164,255,1) 100%);
+}
+
+*:focus {
+  outline: none; /*remove blue focus when clicking components*/
+}
+
+.header {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+#login-form {
+  max-width: 800px;
+  margin: auto; 
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#login-form input {
+  border-radius: 15px;
+  padding: 5px;
+  padding-left: 10px;
+  border: 0;
+  width: 20%;
+  min-width: 120px;
+}
+
+#login-form button {
+  border-radius: 15px;
+  padding: 5px;
+  border: 0;
+  cursor: pointer;
+  width: 10%;
+  min-width: 60px;
+}
+
+#login-form button:hover {
+  background: rgb(2,0,36);
+  background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(0,164,255,1) 100%);
+  color: white;
+}
+
+.chat-container {
+  display: none;
+  max-width: 800px;
+  max-height: 500px;
+  margin: auto; /* To center in the middle */
+  position: relative;
+  height: 100%;
+}
+
+.chat-title {
+  background-color: rgb(237, 237, 237);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 10px;
+}
+.users-connected {
+  color: rgb(0, 0, 0);
+  float: right;
+}
+
+.message-list-container {
+  background: rgb(2,0,36);
+  background: linear-gradient(135deg, rgba(2,0,36,1) 0%, rgba(0,164,255,1) 100%);
+  
+  height: 100%; 
+  overflow-y: scroll; /* Add scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+.message-container {
+  background: rgba(0, 166, 255, 0.479);
+
+  color: white;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto; /*break words automatically when text wraps*/
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  padding: 10px;
+  margin: 10px;
+}
+.message-container:hover {
+  background: rgb(237, 237, 237);
+  border-color: #333;
+  color: black;
+}
+
+.our {
+  background: rgba(2, 0, 36, 0.479);
+  color: white;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 0;
+}
+
+.notification {
+  background: rgba(255, 255, 255, 0.164);
+  color: white;
+  border-top-left-radius: 10px;
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.message-username {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.chat-form {
+  background-color: rgb(209, 218, 215);
+  padding: 10px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+
+}
+
+.chat-form input {
+  border-radius: 15px;
+  padding: 5px;
+  padding-left: 10px;
+  border: 0;
+  width: 85%;
+}
+
+.chat-form button {
+  background: rgb(2,0,36);
+  background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(0,164,255,1) 100%);
+  color: white;
+  
+  border-radius: 15px;
+  padding: 5px;
+  border: 0;
+  cursor: pointer;
+  width: 13%;
+}
+
+.chat-form button:hover {
+  background: rgb(255, 255, 255);
+  color: black;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px black; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(235,235,235);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(2,0,36);
+}

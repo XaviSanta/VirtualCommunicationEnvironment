@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/04932c58f4.js" crossorigin="anonymous"></script>
+    <script src="./config.js"></script>
+    <link href="./style.css" rel="stylesheet">
+  </head>
+
+  <body>
+      <header class="header">
+        <h1>Lab 1 - Chat</h1>
+      </header>
+      
+      <div id="login-form">
+        <p>
+          <i class="fa fa-user" id='user-icon' style="font-size:15px;color:white;"></i>
+          <input 
+            id="username-input"
+            type="text"
+            placeholder="User name"
+          >
+
+          <i class="fas fa-couch" style="font-size:15px;color:white;"></i>
+          <input 
+            id="room-input"
+            placeholder="Room name"
+          >
+          <button 
+            id="login-button" 
+            onclick="sendLogin()"
+          >
+          Enter <i class="fas fa-sign-in-alt"></i>
+          </button>
+        </p>
+      </div>
+
+    <!--Chat -------------------------- -->
+    <div class="chat-container" id="chat-container" onclick="setFocusMessageInput()">
+      <div class="chat-title" id="chat-title">
+        Room <b id=roomName></b> 
+        <p class="users-connected">Users connected: <span id="usersConnected"></span></p>
+      </div>
+
+      <div 
+        class="message-list-container" 
+        id="container-messages" 
+        scrolling="yes">
+      </div>
+
+      <footer>
+        <div class="chat-form">
+          <input 
+            id="sendMessageInput" 
+            placeholder="Write a message"
+            autocomplete="off">
+          <button 
+            id="sendMessageButton" 
+            onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </footer>
+    </div>
+    <script src="./serverApi.js"></script>
+    <script src="./code.js"></script>
+  </body>
+</html>
