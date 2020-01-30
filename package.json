@@ -1,0 +1,23 @@
+{
+  "name": "lab2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "nodemon": "^2.0.2",
+    "redis": "^2.8.0",
+    "redis-server": "^1.2.2",
+    "uuid": "^3.4.0",
+    "websocket": "^1.0.31"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node serverExpress",
+    "dev": "nodemon serverExpress"
+  },
+  "author": "",
+  "license": "ISC"
+}
