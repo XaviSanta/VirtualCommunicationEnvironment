@@ -8,7 +8,7 @@ var users = [];
 var history = [];
 
 var server = http.createServer((req, res) => {
-  console.log('Request:' + requestAnimationFrame.url);
+  console.log('Request:' + req.url);
   res.end('OK');
 });
 
@@ -23,12 +23,9 @@ var wsServer = new WebSocketServer({
 // WebSocket server
 wsServer.on('request', (req) => {
   var connection = req.accept(null, req.origin);
-  
-  // Save in which position the user is in the list so we can remove easily when 
-  // they disconnect
-  var index = users.push(connection) - 1; 
-  console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
   var userName = false;
+  var password;
+  var index;
 
   // When we recieve a message from a user:
   connection.on('message', (msg) => {
@@ -36,8 +33,18 @@ wsServer.on('request', (req) => {
       
       // If we didn't received the userName yet 
       if(userName === false) {
-        userName = msg.utf8Data;
+        msg = JSON.parse(msg.utf8Data);
+        // Save in which position the user is in the list so we can remove easily when 
+        // they disconnect
+        index = users.push(connection) - 1; 
+        console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
+        
+        connection.send(JSON.stringify({type: 'LoginOK'}));
+        
+        userName = msg.username;
+        password = msg.password;
       } 
+
       else { // Log and send to all users the message sent by the user
         const obj = {
           author: userName,
