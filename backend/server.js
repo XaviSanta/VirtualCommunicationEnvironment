@@ -38,41 +38,15 @@ wsServer.on('request', (req) => {
   
   // When we recieve a message from a user:
   connection.on('message', (msg) => {
-    var posX, posY;
-    var password;
-
     if (msg.type === 'utf8') {
       msg = JSON.parse(msg.utf8Data);
        
       switch (msg.type) {
-        // If we didn't received the username yet 
         case 'login':
           // Save in which position the user is in the list so we can remove easily when they disconnect
           index = connections.push(connection) - 1; 
+          manageLogin(username = msg.data.username, msg.data.password, connection);
           console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
-          
-          // If username is in DB -> Send location of the character
-          username = msg.data.username;
-          password = msg.data.password;
-          
-          // If doesn't exist, add to database
-          if(!isUserRegistered(username)) {
-            savePasswordInDB(username, password);
-            updateUserPositionDB(username, 0, 0); 
-            setUserIsConnected(username, true);
-            sendAllPositionsToUser(connection);
-          } else {
-            // Check password
-            if(password !== users[username].password) {
-              sendLoginStatus(connection, 'LoginWRONG');
-            } else {
-              sendLoginStatus(connection, 'LoginOK');
-              setUserIsConnected(username, true);
-              position = getUserPosition(username);
-              updateUserPositionDB(username, position.posX, position.posY);
-              sendAllPositionsToUser(connection);
-            } 
-          }
           break;
         // If its a message: Log and send to all connections the message sent by the user
         case 'message':
@@ -80,6 +54,7 @@ wsServer.on('request', (req) => {
             author: username,
             content: msg.content,
           };
+          
           history.push(obj);
           saveMessage(obj);
   
@@ -110,6 +85,27 @@ wsServer.on('request', (req) => {
 
 
 // FUNCTIONS
+
+function manageLogin(username, password, connection) {
+  // If doesn't exist, add to database
+  if(!isUserRegistered(username)) {
+    savePasswordInDB(username, password);
+    updateUserPositionDB(username, 0, 0); 
+    setUserIsConnected(username, true);
+    sendAllPositionsToUser(connection);
+  } else {
+    // If exists -> check password
+    if(password !== users[username].password) {
+      sendLoginStatus(connection, 'LoginWRONG');
+    } else {
+      sendLoginStatus(connection, 'LoginOK');
+      setUserIsConnected(username, true);
+      position = getUserPosition(username);
+      updateUserPositionDB(username, position.posX, position.posY);
+      sendAllPositionsToUser(connection);
+    } 
+  }
+}
 
 function getOnlinePositions() {
   // Send positions of all connected people
