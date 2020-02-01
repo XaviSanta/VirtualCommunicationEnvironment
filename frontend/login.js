@@ -9,7 +9,7 @@ function login() {
   
   connection.onopen = () => {
     console.log('Connection is open and ready to use');
-    connection.send(JSON.stringify({username, password}));
+    connection.send(JSON.stringify({type: 'login', data: {username, password}}));
   };
   
   connection.onerror = (err) => {
@@ -33,7 +33,7 @@ function login() {
 
       // TODO
       case 'LoginWRONG':
-        console.log('LoginStatus: ❌' );
+        alert('Wrong password: ❌' );
 
       default:
         break;

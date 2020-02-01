@@ -1,39 +1,141 @@
-// FIREBASE
-// Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
+// Require (Firebase, websocket, http)
 var firebase = require("firebase");
+var firebaseConfig = require('./firebaseConfig');
+var WebSocketServer = require('websocket').server;
+var http = require('http');
 
-// Add the Firebase products that you want to use
-require("firebase/auth");
-require("firebase/firestore");
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyB_bCF4WzHJeV8AQ6vBwtP_5seeteIxfis",
-  authDomain: "chat-5ea5c.firebaseapp.com",
-  databaseURL: "https://chat-5ea5c.firebaseio.com",
-  projectId: "chat-5ea5c",
-  storageBucket: "chat-5ea5c.appspot.com",
-  messagingSenderId: "848769946366",
-  appId: "1:848769946366:web:c636f9013d5bedc0598baf",
-  measurementId: "G-RN2LNY0C6S"
-};
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Reference messages collection
+// Global variables
+var users; // User Database from firebase
+var connections = []; // List of connections users connected to the webSocket
+var history = []; // Log of the messages sent
+
+// References
+var usersRef = firebase.database().ref().child('users');
 var messagesRef = firebase.database().ref('messages');
-var userPositionsRef = firebase.database().ref().child('userPositions');
+
+// When database is updated:
+usersRef.on('value', data => users = data.val());
+messagesRef.on('value', gotMessages);
+
+// Http server
+var server = http.createServer();
+const port = 9034;
+server.listen(port, () => console.log(`Server started on port ${port}`));
+
+// WebSocket
+var wsServer = new WebSocketServer({
+  httpServer: server
+});
+
+// WebSocket on request
+wsServer.on('request', (req) => {
+  var connection = req.accept(null, req.origin);
+  var username = false;
+  var index;
+  
+  // When we recieve a message from a user:
+  connection.on('message', (msg) => {
+    var posX, posY;
+    var password;
+
+    if (msg.type === 'utf8') {
+      msg = JSON.parse(msg.utf8Data);
+       
+      switch (msg.type) {
+        // If we didn't received the username yet 
+        case 'login':
+          // Save in which position the user is in the list so we can remove easily when they disconnect
+          index = connections.push(connection) - 1; 
+          console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
+          
+          // If username is in DB -> Send location of the character
+          username = msg.data.username;
+          password = msg.data.password;
+          
+          // If doesn't exist, add to database
+          if(!isUserRegistered(username)) {
+            savePasswordInDB(username, password);
+            updateUserPositionDB(username, 0, 0); 
+            setUserIsConnected(username, true);
+            sendAllPositionsToUser(connection);
+          } else {
+            // Check password
+            if(password !== users[username].password) {
+              sendLoginStatus(connection, 'LoginWRONG');
+            } else {
+              sendLoginStatus(connection, 'LoginOK');
+              setUserIsConnected(username, true);
+              position = getUserPosition(username);
+              updateUserPositionDB(username, position.posX, position.posY);
+              sendAllPositionsToUser(connection);
+            } 
+          }
+          break;
+        // If its a message: Log and send to all connections the message sent by the user
+        case 'message':
+          const obj = {
+            author: username,
+            content: msg.content,
+          };
+          history.push(obj);
+          saveMessage(obj);
+  
+          connections.forEach(u => {
+            u.sendUTF(JSON.stringify({type: 'message', data: obj}));
+          });
+          break;
+
+        // If its a position: Update DB of positions and broadcast to all connections
+        case 'position':
+          updateUserPositionDB(username, msg.posX, msg.posY);
+
+        default:
+          break;
+      }
+      
+    }
+  });
+
+  connection.on('close', (connection) => {
+    console.log('User is gone');
+    setUserIsConnected(username, false);
+
+    // Remove user from the list
+    connections.splice(index, 1);
+  });
+});
 
 
-// GLOBAL VARIABLES
-// List of current users connected to the webSocket
-var users = [];
-// Log of the messages sent
-var history = [];
-var positions = [];
+// FUNCTIONS
 
-userPositionsRef.on('value', snap => positions = snap.val());
-messagesRef.on('value', gotMessages, errData => console.log('Error', errData));
+function getOnlinePositions() {
+  // Send positions of all connected people
+  let positions = {};
+
+  Object.keys(users).forEach(username => {
+    if(users[username].connected === true) {
+      positions[username] = users[username].position;
+    }
+  });
+
+  return positions;
+}
+
+function getUserPosition(username) {
+  let positions = getOnlinePositions();
+  let posX, posY;
+  if(positions == null || positions[username] === undefined) {
+    posX = posY = 0;
+  } else {
+    posX = positions[username].posX;
+    posY = positions[username].posY;
+  }
+
+  return {posX, posY};
+}
 
 function gotMessages(data) {
   if(data.val() === null){
@@ -49,108 +151,37 @@ function gotMessages(data) {
   }
 }
 
-
 function saveMessage(obj) {
   var newMessageRef = messagesRef.push();
   newMessageRef.set(obj);
 }
 
-/////////////////////////////////////////////////////////////////////////
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+function isUserRegistered(username) {
+  return users !== null && users[username] !== undefined;
+}
 
-var server = http.createServer((req, res) => {
-  console.log('Request:' + req.url);
-  res.end('OK');
-});
+function savePasswordInDB(username, password) {
+  usersRef.child(username).set({password});
+}
 
-const port = 9034;
-server.listen(port, () => console.log(`Server started on port ${port}`));
+function setUserIsConnected(username, connected) {
+  usersRef.child(`${username}/connected`).set(connected);
+}
 
-// create the server
-var wsServer = new WebSocketServer({
-  httpServer: server
-});
+function sendAllPositionsToUser(connection) {
+  connection.send(JSON.stringify({type: 'positions', data: getOnlinePositions()}));
+}
 
-// WebSocket server
-wsServer.on('request', (req) => {
-  var connection = req.accept(null, req.origin);
-  var username = false;
-  var password;
-  var index;
+function sendLoginStatus(connection, status) {
+  connection.send(JSON.stringify({type: status}));
+}
 
-  // When we recieve a message from a user:
-  connection.on('message', (msg) => {
-    if (msg.type === 'utf8') {
-      msg = JSON.parse(msg.utf8Data);
-      
-      // If we didn't received the username yet 
-      if(username === false) {
-        // Save in which position the user is in the list so we can remove easily when they disconnect
-        index = users.push(connection) - 1; 
-        console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
-        
-        connection.send(JSON.stringify({type: 'LoginOK'}));
-        
-        // If username is in DB -> Send location of the character
-        username = msg.username;
-        password = msg.password;
-        let posX, posY;
-        
-        if(positions == null || positions[username] === undefined) {
-          posX = posY = 0;
-        } else {
-          console.log('get coordinates from DB');
-          posX = positions[username].posX;
-          posY = positions[username].posY;
-        }
+function updateUserPositionDB(username, posX, posY) {
+  usersRef.child(`${username}/position`).set({posX:posX, posY:posY}); 
 
-        // Update positions DB
-        userPositionsRef.child(username).set({author: username, posX:posX, posY:posY}); 
-        
-        // Send all positions to the user who connected now
-        connection.send(JSON.stringify({type: 'positions', data: positions}));
-      } 
-
-      else { 
-        switch (msg.type) {
-          // If its a message: Log and send to all users the message sent by the user
-          case 'message':
-            const obj = {
-              author: username,
-              content: msg.content,
-            };
-            history.push(obj);
-            saveMessage(obj);
-    
-            users.forEach(u => {
-              u.sendUTF(JSON.stringify({type: 'message', data: obj}));
-            });
-            break;
-
-          // If its a position: Update DB of positions and broadcast to all users
-          case 'position':
-            // Create obj position
-            var newPos = {author:username, posX:msg.posX, posY:msg.posY};
-
-            // Update DB
-            userPositionsRef.child(username).set(newPos);
-
-            // Broadcast position updated
-            users.forEach(u => {
-              u.send(JSON.stringify({type: 'position', data: newPos}));
-            });
-
-          default:
-            break;
-        }
-      }
-    }
+  // Broadcast to all users the new position of the user
+  let data = {author: username, posX, posY};
+  connections.forEach(u => {
+    u.send(JSON.stringify({type: 'position', data}));
   });
-
-  connection.on('close', (connection) => {
-    console.log('User is gone');
-    // Remove user from the list
-    users.splice(index, 1);
-  });
-});
+}
