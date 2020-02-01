@@ -11,17 +11,18 @@ connection.onmessage = (msg) => {
   }
   console.log(obj);
   // TODO: Check type of message 
-  // TODO: If its an okay --> Load world with your user
-  if(obj.type === 'OK') {
-    $('.container').load('world.html');
-  }
   //  TODO: If its a user message: Append message in chatContainer
   //  TODO: If its a user move: move that character to the specified location
 };
 
+// Send new coordinates of the user move
+var canvas = document.getElementById('myCanvas').addEventListener('click', function(e) {
+  connection.send(JSON.stringify({type: 'position', posX: e.clientX, posY: e.clientY}));
+});
+
 $('#input').keydown((e) => {
   if(e.key === 'Enter') {
-    var msg = $('#input').val();
-    connection.send(msg);
+    var content = $('#input').val();
+    connection.send(JSON.stringify({type: 'message', content: content}));
   }
 });
