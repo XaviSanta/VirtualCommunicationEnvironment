@@ -46,7 +46,6 @@ function loop() {
 
 //start loop
 loop();
-
 function draw() {
   var parent = canvas.parentNode;
   var rect = parent.getBoundingClientRect();
