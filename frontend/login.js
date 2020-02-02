@@ -1,7 +1,8 @@
 var connection;
+var username;
 
 function login() {
-  var username = $('#username').val();
+  username = $('#username').val();
   var password = $('#password').val();
 
   connection = new WebSocket('ws://ecv-etic.upf.edu/node/9034/ws/');

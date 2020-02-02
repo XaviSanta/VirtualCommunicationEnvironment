@@ -18,19 +18,21 @@ $('.chat-form input').keydown((e) => {
 function sendInputMessage() {
   var content = $('.chat-form input').val();
   connection.send(JSON.stringify({type: 'message', content: content}));
+  clearInput();
+  setFocusMessageInput();
 }
 
 function manageConnectionMesssage(msg) {
-  try {
-    var obj = JSON.parse(msg.data);
-  } catch(e) {
-    console.log('This doesnt look like valid JSON');
-    return;
-  }
+  var obj = JSON.parse(msg.data);
   console.log(obj);
-  // TODO: Check type of message 
-  //  TODO: If its a user message: Append message in chatContainer
-  //  TODO: If its a user move: move that character to the specified location
+
+  if(obj.type === 'message') {
+    appendMessage(obj.data);
+  }
+
+  if(obj.type === 'position') {
+    // TODO: move that character to the specified location
+  }
 }
 
 function manageConnectionError(err) {
@@ -59,4 +61,48 @@ function draw() {
 
 function update() {
 
+}
+
+// MESSAGE LIST
+function appendMessage(msg) {
+  // Add to list of messages
+  // messageList.push(msg);
+
+  // Create the elements to append a message
+  let messageListContainer = document.getElementById('container-messages');
+  let messageContainer = document.createElement('div');
+  let usernameDiv = document.createElement('div');
+  let textMessageP = document.createElement('p');
+  
+  // Set the attributes
+  usernameDiv.innerHTML = msg.author;
+  // usernameDiv.style.color = getColorById(msg.id);
+  textMessageP.innerHTML = msg.content;
+  
+  // If its my message -> set class to our message, else set class to message
+  msg.author === username ? 
+    messageContainer.className = 'our message-container' :
+    messageContainer.className = 'message-container';
+    
+  usernameDiv.className = 'message-username';
+  
+  // Append the elements
+  messageListContainer.appendChild(messageContainer);
+  messageContainer.appendChild(usernameDiv);
+  messageContainer.appendChild(textMessageP);
+
+  // scroll bottom
+  scrollElementToBottom(messageListContainer);
+}
+
+function scrollElementToBottom(element) {
+  element.scrollTop = element.scrollHeight;
+}
+
+function setFocusMessageInput(){
+  document.getElementById("write-message").focus();
+}
+
+function clearInput() {
+  document.getElementById('write-message').value = '';
 }
