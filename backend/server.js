@@ -48,24 +48,22 @@ wsServer.on('request', (req) => {
           manageLogin(username = msg.data.username, msg.data.password, connection);
           console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
           break;
+          
         // If its a message: Log and send to all connections the message sent by the user
         case 'message':
-          const obj = {
-            author: username,
-            content: msg.content,
-          };
+          const obj = {author: username, content: msg.content};
           
+          // Log 
           history.push(obj);
           saveMessage(obj);
-  
-          connections.forEach(u => {
-            u.sendUTF(JSON.stringify({type: 'message', data: obj}));
-          });
+
+          // Send
+          broadcastMessage(obj);
           break;
 
         // If its a position: Update DB of positions and broadcast to all connections
         case 'position':
-          updateUserPositionDB(username, msg.posX, msg.posY);
+          updateUserPosition(username, msg.posX, msg.posY);
 
         default:
           break;
@@ -90,7 +88,7 @@ function manageLogin(username, password, connection) {
   // If doesn't exist, add to database
   if(!isUserRegistered(username)) {
     savePasswordInDB(username, password);
-    updateUserPositionDB(username, 0, 0); 
+    updateUserPosition(username, 0, 0); 
     setUserIsConnected(username, true);
     sendAllPositionsToUser(connection);
   } else {
@@ -101,7 +99,7 @@ function manageLogin(username, password, connection) {
       sendLoginStatus(connection, 'LoginOK');
       setUserIsConnected(username, true);
       position = getUserPosition(username);
-      updateUserPositionDB(username, position.posX, position.posY);
+      updateUserPosition(username, position.posX, position.posY);
       sendAllPositionsToUser(connection);
     } 
   }
@@ -152,6 +150,12 @@ function saveMessage(obj) {
   newMessageRef.set(obj);
 }
 
+function broadcastMessage(obj) {
+  connections.forEach(u => {
+    u.sendUTF(JSON.stringify({type: 'message', data: obj}));
+  });
+}
+
 function isUserRegistered(username) {
   return users !== null && users[username] !== undefined;
 }
@@ -172,7 +176,8 @@ function sendLoginStatus(connection, status) {
   connection.send(JSON.stringify({type: status}));
 }
 
-function updateUserPositionDB(username, posX, posY) {
+function updateUserPosition(username, posX, posY) {
+  // Update DATABASE
   usersRef.child(`${username}/position`).set({posX:posX, posY:posY}); 
 
   // Broadcast to all users the new position of the user
