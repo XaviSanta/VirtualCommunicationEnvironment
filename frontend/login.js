@@ -22,7 +22,7 @@ function login() {
       // TODO: If its a message 'positions' we can load now the world with all the charachter in their positions
       case 'positions':
         console.log('Positions: ', obj);
-        $('.container').load('world.html');
+        $('.world').load('world.html');
         break;
 
       // TODO
