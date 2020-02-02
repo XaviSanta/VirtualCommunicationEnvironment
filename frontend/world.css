@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+*:focus {
+  outline: none; /*remove blue focus when clicking components*/
+}
+
 div.world{
   width: 100%;
   height: 100%;
@@ -22,10 +26,11 @@ header {
 
 section {
   width: 100%; 
-  height: -moz-calc(100% - 90px); /* Firefox */
-  height: -webkit-calc(100% - 90px); /* Chrome, Safari */
+  height: -moz-calc(100% - 96px); /* Firefox */
+  height: -webkit-calc(100% - 96px); /* Chrome, Safari */
 }
 
+/* Create two columns/boxes that floats next to each other */
 .container-canvas {
   float: left;
   width: 65%;
@@ -33,9 +38,8 @@ section {
   height: 100%;
 }
 
-/* Create two columns/boxes that floats next to each other */
 .chat {
-  float: right;
+  float: left;
   width: 35%;
   background: #ccc;
   padding: 20px;  
@@ -58,7 +62,7 @@ section:after {
 /* Style the footer */
 footer {
   background-color: #777;
-  padding: 10px;
+  /* padding: 10px; */
   text-align: center;
   color: white;
   position: fixed;
@@ -72,4 +76,38 @@ footer {
     width: 100%;
     height: auto;
   }
+}
+
+/* ////////////////chat form////////////////////////////// */
+.chat-form {
+  background-color: rgb(209, 218, 215);
+  padding: 10px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+
+}
+
+.chat-form input {
+  border-radius: 15px;
+  padding: 5px;
+  padding-left: 10px;
+  border: 0;
+  width: 85%;
+}
+
+.chat-form button {
+  background: rgb(2,0,36);
+  background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(0,164,255,1) 100%);
+  color: white;
+  
+  border-radius: 15px;
+  padding: 5px;
+  border: 0;
+  cursor: pointer;
+  width: 13%;
+}
+
+.chat-form button:hover {
+  background: rgb(255, 255, 255);
+  color: black;
 }

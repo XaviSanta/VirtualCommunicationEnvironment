@@ -9,12 +9,16 @@ canvas.addEventListener('click', function(e) {
   connection.send(JSON.stringify({type: 'position', posX: e.clientX, posY: e.clientY}));
 });
 
-$('#input').keydown((e) => {
+$('.chat-form input').keydown((e) => {
   if(e.key === 'Enter') {
-    var content = $('#input').val();
-    connection.send(JSON.stringify({type: 'message', content: content}));
+    sendInputMessage();
   }
 });
+
+function sendInputMessage() {
+  var content = $('.chat-form input').val();
+  connection.send(JSON.stringify({type: 'message', content: content}));
+}
 
 function manageConnectionMesssage(msg) {
   try {
