@@ -8,9 +8,9 @@ var http = require('http');
 firebase.initializeApp(firebaseConfig);
 
 // Global variables
-var users; // User Database from firebase
+var users;            // User Database from firebase
 var connections = []; // List of connections users connected to the webSocket
-var history = []; // Log of the messages sent
+var history = [];     // Log of the messages sent
 
 // References
 var usersRef = firebase.database().ref().child('users');
@@ -48,7 +48,7 @@ wsServer.on('request', (req) => {
           manageLogin(username = msg.data.username, msg.data.password, connection);
           console.log('New WebSocket User: ' + req.origin + ' index: ' + index);
           break;
-          
+
         // If its a message: Log and send to all connections the message sent by the user
         case 'message':
           const obj = {author: username, content: msg.content};

@@ -4,8 +4,7 @@ function login() {
   var username = $('#username').val();
   var password = $('#password').val();
 
-  connection = new WebSocket('ws://127.0.0.1:9034'); // test on localhost
-  // connection = new WebSocket('ws://ecv-etic.upf.edu:9034'); // Descomentar al server machine
+  connection = new WebSocket('ws://ecv-etic.upf.edu/node/9034/ws/');
   
   connection.onopen = () => {
     console.log('Connection is open and ready to use');
@@ -13,7 +12,7 @@ function login() {
   };
   
   connection.onerror = (err) => {
-    console.log('An error ocurred' + err);
+    console.log('An error ocurred', err);
   }; 
   
   connection.onmessage = (msg) => {
