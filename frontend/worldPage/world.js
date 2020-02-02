@@ -28,17 +28,12 @@ function manageConnectionMesssage(msg) {
   }
 
   if(obj.type === 'position') {
-    // TODO: FIX THIS, maybe update the positions data when new user connects can solve the problem
-    // that we are having, which is that if new user moves, then we can not update its position because we didnt have it before
-    
-    // TODO: update the character position to the specified location
+    // Update the user position with the new data
     let author = obj.data.author;
     let posX = obj.data.posX;
     let posY = obj.data.posY;
 
-    // TODO: Update the positions object with the new data
-    positions[author].posX = posX;
-    positions[author].posY = posY;
+    positions[author] = {posX, posY};
     console.log('Updatedpositions', positions);
   }
 }
