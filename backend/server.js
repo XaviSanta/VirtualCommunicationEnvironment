@@ -64,7 +64,10 @@ wsServer.on('request', (req) => {
         // If its a position: Update DB of positions and broadcast to all connections
         case 'position':
           updateUserPosition(username, msg.posX, msg.posY);
-
+          break;
+        case 'getPositions':
+          sendAllPositionsToUser(connection);
+          break;
         default:
           break;
       }
@@ -90,7 +93,6 @@ function manageLogin(username, password, connection) {
     savePasswordInDB(username, password);
     updateUserPosition(username, 0, 0); 
     setUserIsConnected(username, true);
-    sendAllPositionsToUser(connection);
   } else {
     // If exists -> check password
     if(password !== users[username].password) {
@@ -100,7 +102,6 @@ function manageLogin(username, password, connection) {
       setUserIsConnected(username, true);
       position = getUserPosition(username);
       updateUserPosition(username, position.posX, position.posY);
-      sendAllPositionsToUser(connection);
     } 
   }
 }

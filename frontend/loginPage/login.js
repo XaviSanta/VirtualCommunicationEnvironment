@@ -1,5 +1,6 @@
 var connection;
 var username;
+var positions = {};
 
 function login() {
   username = $('#username').val();
@@ -20,15 +21,20 @@ function login() {
     var obj = JSON.parse(msg.data);
 
     switch (obj.type) {
-      // TODO: If its a message 'positions' we can load now the world with all the charachter in their positions
-      case 'positions':
-        console.log('Positions: ', obj);
-        $('.world').load('world.html');
-        break;
+      // case 'positions':
+      //   positions = obj.data;
+      //   console.log('Positions in login: ', positions);
+      //   break;
 
       // TODO
       case 'LoginOK':
-        console.log('LoginStatus: ✅' );
+        console.log('LoginStatus: ✅', obj );
+        $('.world').load('../worldPage/world.html');
+
+        // Ask for positions, the timeout is because i could pass the variable positions
+        // and when i was reading the variable positions in world.js i was getting undefined
+        // so now when i receive the response, its in world, not in login
+        setTimeout(() => connection.send(JSON.stringify({type: 'getPositions'})), 250);
         break;
 
       // TODO
@@ -40,3 +46,4 @@ function login() {
     }
   };
 }
+
