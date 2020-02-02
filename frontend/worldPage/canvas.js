@@ -24,8 +24,10 @@ function draw() {
   canvas.width = rect.width;
   canvas.height = rect.height;
   // TODO: draw the 'floor'
-
+  
   // TODO: draw the users in their positions
+  // Iterate through every user, and draw what in positions its stored
+
   // TODO: draw the messages 
 }
 
