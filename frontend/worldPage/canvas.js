@@ -33,11 +33,7 @@ function draw() {
   canvas.height = rect.height;
   // TODO: draw the 'floor'
   drawUsers();
-  // TODO: draw the messages 
-  drawMessages();
 }
-
-
 
 function update() { // TODO: This maybe we can do it as the last thing
   // TODO: Update the user list position if needed
@@ -45,10 +41,6 @@ function update() { // TODO: This maybe we can do it as the last thing
 }
 
 // -------------------------------------------------------------------------------
-function drawMessages() {
-
-}
-
 function drawUsers() {
   users = Object.keys(positions);
   users.forEach(u => {
@@ -58,12 +50,18 @@ function drawUsers() {
 
 function drawUser(u) {
   // TODO: If user is moving;
-  let x = positions[u].posX - w;
-  let y = positions[u].posY - 2*h;
-  renderAnimation(ctx, person, walking, x, y, 1.5, 0, false);
+  let x = positions[u].posX;
+  let y = positions[u].posY;
+  renderAnimation(ctx, person, walking, x-w, y - 2*h, 1.5, 0, false);
+
+  // Draw Username
   ctx.textAlign = 'center';
-  ctx.fillText(u, x + w, y);
+  ctx.fillText(u, x, y - 0.3*h);
+
+  // Draw last Message
+  ctx.fillText(messageUser[u] || '', x, y - 2*h);
 }
+
 // Print sprite 
 function renderAnimation( ctx, image, anim, x, y, scale, offset, flip ) {
 	offset = offset || 0;

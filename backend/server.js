@@ -150,6 +150,8 @@ function gotMessages(data) {
 function saveMessage(obj) {
   var newMessageRef = messagesRef.push();
   newMessageRef.set(obj);
+
+  usersRef.child(`${obj.author}/lastMessage`).set(obj.content); 
 }
 
 function broadcastMessage(obj) {

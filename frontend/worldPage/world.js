@@ -44,9 +44,11 @@ function manageConnectionError(err) {
 
 // MESSAGE LIST
 var messageList = [];
+var messageUser = {};
 function appendMessage(msg) {
   // Add to list of messages
   messageList.push(msg);
+  messageUser[msg.author] = msg.content;
 
   // Create the elements to append a message
   let messageListContainer = document.getElementById('container-messages');
