@@ -13,8 +13,12 @@ var lastY = 0;
 
 // Send new coordinates of the user move
 canvas.addEventListener('click', function(e) {
+  lastX = positions[username].posX;
+  lastY = positions[username].posY;
+
   points = linePoints(lastX, lastY, e.clientX, e.clientY, 60);
   currentFrame = 0;
+  
   lastX = e.clientX;
   lastY = e.clientY;
   animate();
