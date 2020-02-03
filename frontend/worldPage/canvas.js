@@ -1,5 +1,12 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext("2d");
+var person = new Image();
+person.src = '../images/javi-spritesheet.png';
+var w = 32; //sprite width
+var h = 64; //sprite height
+var idle = [0];
+var walking = [2,3,4,5,6,7,8,9];
+
 // Send new coordinates of the user move
 canvas.addEventListener('click', function(e) {
   connection.send(JSON.stringify({type: 'position', posX: e.clientX, posY: e.clientY}));
@@ -25,33 +32,38 @@ function draw() {
   canvas.width = rect.width;
   canvas.height = rect.height;
   // TODO: draw the 'floor'
-  users = Object.keys(positions);
-  users.forEach(u => {
-    // // console.log(positions[u]);
-    let x = positions[u].posX;
-    let y = positions[u].posY - 42;
-    // renderAnimation(ctx, image, anim, x, y, 1, 1, false);
-    ctx.beginPath();
-    ctx.rect(x, y, 50, 50);
-    ctx.stroke();
-  });
-  // TODO: draw the users in their positions
-  // Iterate through every user, and draw what in positions its stored
-
+  drawUsers();
   // TODO: draw the messages 
+  drawMessages();
 }
 
-function drawUser() {
 
-}
+
 function update() { // TODO: This maybe we can do it as the last thing
   // TODO: Update the user list position if needed
   // TODO: Update the user characters spritesheet if they walk
 }
 
 // -------------------------------------------------------------------------------
-var idle = [0];
-var walking = [2,3,4,5,6,7,8,9];
+function drawMessages() {
+
+}
+
+function drawUsers() {
+  users = Object.keys(positions);
+  users.forEach(u => {
+    drawUser(u);
+  });
+}
+
+function drawUser(u) {
+  // TODO: If user is moving;
+  let x = positions[u].posX - w;
+  let y = positions[u].posY - 2*h;
+  renderAnimation(ctx, person, walking, x, y, 1.5, 0, false);
+  ctx.textAlign = 'center';
+  ctx.fillText(u, x + w, y);
+}
 // Print sprite 
 function renderAnimation( ctx, image, anim, x, y, scale, offset, flip ) {
 	offset = offset || 0;
@@ -60,8 +72,6 @@ function renderAnimation( ctx, image, anim, x, y, scale, offset, flip ) {
 }
 
 function renderFrame(ctx, image, frame, x, y, scale, flip) {
-	var w = 32; //sprite width
-	var h = 64; //sprite height
 	scale = scale || 1;
 	var num_hframes = image.width / w;
 	var xf = (frame * w) % image.width;
@@ -72,6 +82,6 @@ function renderFrame(ctx, image, frame, x, y, scale, flip) {
 		ctx.translate(w*scale,0);
 		ctx.scale(-1,1);
 	}
-	ctx.drawImage( frame, xf,yf,w,h, 0,0,w*scale,h*scale );
+	ctx.drawImage( image, xf,yf,w,h, 0,0,w*scale,h*scale );
 	ctx.restore();
 }
