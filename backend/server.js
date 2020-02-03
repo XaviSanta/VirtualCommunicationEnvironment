@@ -93,6 +93,7 @@ function manageLogin(username, password, connection) {
     savePasswordInDB(username, password);
     updateUserPosition(username, 0, 0); 
     setUserIsConnected(username, true);
+    sendLoginStatus(connection, 'LoginOK');
   } else {
     // If exists -> check password
     if(password !== users[username].password) {
