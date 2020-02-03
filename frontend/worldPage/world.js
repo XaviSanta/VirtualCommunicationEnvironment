@@ -36,6 +36,12 @@ function manageConnectionMesssage(msg) {
     positions[author] = {posX, posY};
     console.log('Updatedpositions', positions);
   }
+
+  if(obj.type === 'closeConnection') {
+    // Remove user from the object position se we stop drawing him on the canvas
+    let username = obj.data;
+    delete positions[username];
+  }
 }
 
 function manageConnectionError(err) {

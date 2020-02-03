@@ -81,6 +81,11 @@ wsServer.on('request', (req) => {
 
     // Remove user from the list
     connections.splice(index, 1);
+
+    // Notify users
+    connections.forEach(u => {
+      u.sendUTF(JSON.stringify({type: 'closeConnection', data: username}));
+    });
   });
 });
 

@@ -10,27 +10,24 @@ var currentFrame = 0;
 var points;
 var lastX = 0;
 var lastY = 0;
+
 // Send new coordinates of the user move
 canvas.addEventListener('click', function(e) {
-
   points = linePoints(lastX, lastY, e.clientX, e.clientY, 60);
   currentFrame = 0;
   lastX = e.clientX;
   lastY = e.clientY;
   animate();
-
-
 });
 
 function animate() {
-            
-            var point = points[currentFrame++];
-            connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y }));
+  var point = points[currentFrame++];
+  connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y }));
 
-            // refire the timer until out-of-points
-            if (currentFrame < points.length) {
-                timer = setTimeout(animate, 1000 / 60);
-            }
+  // refire the timer until out-of-points
+  if (currentFrame < points.length) {
+      timer = setTimeout(animate, 1000 / 60);
+  }
 }
 
 var last = performance.now();
@@ -72,28 +69,28 @@ function drawUsers() {
 
 
 function linePoints(x1, y1, x2, y2, frames) {
-            var dx = x2 - x1;
-            var dy = y2 - y1;
-            var length = Math.sqrt(dx * dx + dy * dy);
-            var incrementX = dx / frames;
-            var incrementY = dy / frames;
-            var a = new Array();
+  var dx = x2 - x1;
+  var dy = y2 - y1;
+  var length = Math.sqrt(dx * dx + dy * dy);
+  var incrementX = dx / frames;
+  var incrementY = dy / frames;
+  var a = new Array();
 
-            a.push({
-                x: x1,
-                y: y1
-            });
-            for (var frame = 0; frame < frames - 1; frame++) {
-                a.push({
-                    x: x1 + (incrementX * frame),
-                    y: y1 + (incrementY * frame)
-                });
-            }
-            a.push({
-                x: x2,
-                y: y2
-            });
-            return (a);
+  a.push({
+      x: x1,
+      y: y1
+  });
+  for (var frame = 0; frame < frames - 1; frame++) {
+      a.push({
+          x: x1 + (incrementX * frame),
+          y: y1 + (incrementY * frame)
+      });
+  }
+  a.push({
+      x: x2,
+      y: y2
+  });
+  return (a);
 }
 
 
