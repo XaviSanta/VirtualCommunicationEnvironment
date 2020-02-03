@@ -10,7 +10,9 @@ function login() {
   
   connection.onopen = () => {
     console.log('Connection is open and ready to use');
-    connection.send(JSON.stringify({type: 'login', data: {username, password}}));
+    if(isValidString(username) && isValidString(password)) {
+      connection.send(JSON.stringify({type: 'login', data: {username, password}}));
+    }
   };
   
   connection.onerror = (err) => {
@@ -47,3 +49,13 @@ function login() {
   };
 }
 
+function isValidString(str) {
+  var arr = ['<', '>', '+', ',', '.', "'", '_', '-', '&', '='];
+  for (var i = arr.length - 1; i >= 0; --i) {
+    if (str.indexOf(arr[i]) != -1) {
+      alert(`The character ${arr[i]} is not allowed`); 
+      return false;
+    }
+  }
+  return str !== '';
+}
