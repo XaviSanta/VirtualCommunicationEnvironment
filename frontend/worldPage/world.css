@@ -38,18 +38,12 @@ section {
   height: 100%;
 }
 
-.chat {
+.message-list-container {
   float: left;
   width: 35%;
   background: #ccc;
   padding: 20px;  
   height: 100%;
-}
-
-/* Style the list inside the menu */
-.chat ul {
-  list-style-type: none;
-  padding: 0;
 }
 
 /* Clear floats after the columns */
@@ -62,7 +56,6 @@ section:after {
 /* Style the footer */
 footer {
   background-color: #777;
-  /* padding: 10px; */
   text-align: center;
   color: white;
   position: fixed;
@@ -70,13 +63,6 @@ footer {
   width: 100%;
 }
 
-/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
-@media (max-width: 700px) {
-  nav, article {
-    width: 100%;
-    height: auto;
-  }
-}
 
 /*///////////////////////////////////// MESSAGE LIST /////////////////////////////////// */
 .message-list-container {
@@ -158,7 +144,6 @@ footer {
   padding: 10px;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-
 }
 
 .chat-form input {
@@ -184,4 +169,25 @@ footer {
 .chat-form button:hover {
   background: rgb(255, 255, 255);
   color: black;
+}
+
+/* mobile */
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media screen and (max-width: 500px), (pointer:none), (pointer:coarse) {
+  .container-canvas {
+    width: 100%;
+    height: 50%;
+  }
+  .message-list-container {
+    width: 100%;
+    height: 45%;
+  }
+
+  #write-message, #sendMessageButton {
+    height: 100px;
+  }
+  #write-message, .message-list-container, header{
+    font-size: 150%;
+  }
 }
