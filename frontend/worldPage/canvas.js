@@ -1,7 +1,17 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext("2d");
 var person = new Image();
-person.src = '../images/javi-spritesheet.png';
+person.src = '../images/man1-spritesheet.png';
+characters = [
+  '../images/man1-spritesheet.png', 
+  '../images/man2-spritesheet.png', 
+  '../images/man3-spritesheet.png',
+  '../images/man4-spritesheet.png',
+  '../images/woman1-spritesheet.png',
+  '../images/woman2-spritesheet.png',
+  '../images/woman3-spritesheet.png',
+  '../images/woman4-spritesheet.png',
+];
 var w = 32; //sprite width
 var h = 64; //sprite height
 var idle = [0];

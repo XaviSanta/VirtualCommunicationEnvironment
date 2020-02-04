@@ -35,7 +35,7 @@ function login() {
         // Ask for positions, the timeout is because i couldnt pass the variable positions
         // and when i was reading the variable positions in world.js i was getting undefined
         // so now when i receive the response, its in world, not in login
-        setTimeout(() => connection.send(JSON.stringify({type: 'getPositions'})), 250);
+        setTimeout(() => connection.send(JSON.stringify({type: 'getPositions'})), 1000);
         break;
 
       // TODO
@@ -48,8 +48,8 @@ function login() {
   };
 }
 
-function isValidString(str) {
-  var arr = ['<', '>', '+', ',', '.', "'", '_', '-', '&', '='];
+function isValidString(str, invalidCharacters = ['<', '>', '+', ',', '.', "'", '_', '-', '&', '=']) {
+  var arr = invalidCharacters;
   for (var i = arr.length - 1; i >= 0; --i) {
     if (str.indexOf(arr[i]) != -1) {
       alert(`The character ${arr[i]} is not allowed`); 

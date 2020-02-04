@@ -10,7 +10,10 @@ $('.chat-form input').keydown((e) => {
 
 function sendInputMessage() {
   var content = $('.chat-form input').val();
-  connection.send(JSON.stringify({type: 'message', content: content}));
+  if(isValidString(content, ['<','>'])) {
+    connection.send(JSON.stringify({type: 'message', content: content}));
+  }
+
   clearInput();
   setFocusMessageInput();
 }
