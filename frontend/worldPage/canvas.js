@@ -36,11 +36,16 @@ canvas.addEventListener('click', function(e) {
 
 function animate() {
   var point = points[currentFrame++];
-  connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y }));
+  connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y, direction: 'right'}));
 
   // refire the timer until out-of-points
   if (currentFrame < points.length) {
       timer = setTimeout(animate, 1000 / 60);
+  }
+
+  // Send that the user has stopped
+  if(currentFrame == points.length) {
+    connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y, direction: 'idle'}));
   }
 }
 
@@ -80,8 +85,6 @@ function drawUsers() {
   });
 }
 
-
-
 function linePoints(x1, y1, x2, y2, frames) {
   var dx = x2 - x1;
   var dy = y2 - y1;
@@ -112,8 +115,19 @@ function drawUser(u) {
   // TODO: If user is moving;
   let x = positions[u].posX;
   let y = positions[u].posY;
+  let dir = positions[u].dir || 'idle';
+  let anim; 
+  if(dir === 'idle') anim = idle;
+  else {
+    let i;
+    if(dir === 'right') i = 0;
+    if(dir === 'down')  i = 1;
+    if(dir === 'left')  i = 2;
+    if(dir === 'up')    i = 3;
+    anim = walking.map(x => x + 16 * i );
+  }
 
-  renderAnimation(ctx, person, walking, x-w, y - 2*h, 1.5, 0, false);
+  renderAnimation(ctx, person, anim, x-w, y - 2*h, 1.5, 0, false);
 
   // Draw Username
   ctx.textAlign = 'center';

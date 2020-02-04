@@ -35,8 +35,9 @@ function manageConnectionMesssage(msg) {
     let author = obj.data.author;
     let posX = obj.data.posX;
     let posY = obj.data.posY;
+    let dir = obj.data.direction;
 
-    positions[author] = {posX, posY};
+    positions[author] = {posX, posY, dir};
     console.log('Updatedpositions', positions);
   }
 
