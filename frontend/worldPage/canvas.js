@@ -14,7 +14,8 @@ characters = [
 ];
 var w = 32; //sprite width
 var h = 64; //sprite height
-var idle = [0];
+var idle = [16];
+var talking = [16,17];
 var walking = [2,3,4,5,6,7,8,9];
 var currentFrame = 0;
 var points;
