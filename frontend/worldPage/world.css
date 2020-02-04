@@ -53,15 +53,7 @@ section:after {
   clear: both;
 }
 
-/* Style the footer */
-footer {
-  background-color: #777;
-  text-align: center;
-  color: white;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
+
 
 
 /*///////////////////////////////////// MESSAGE LIST /////////////////////////////////// */
@@ -139,6 +131,16 @@ footer {
 }
 
 /* /////////////////////////////////////////chat form////////////////////////////// */
+/* Style the footer */
+footer {
+  background-color: #777;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
 .chat-form {
   background-color: rgb(209, 209, 209);
   padding: 10px;
@@ -160,7 +162,7 @@ footer {
   color: white;
   
   border-radius: 15px;
-  padding: 5px;
+  padding: 10px;
   border: 0;
   cursor: pointer;
   width: 13%;
@@ -187,7 +189,7 @@ footer {
   #write-message, #sendMessageButton {
     height: 100px;
   }
-  #write-message, .message-list-container, header{
+  #write-message, .message-list-container, header, i{
     font-size: 150%;
   }
 }
