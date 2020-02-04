@@ -189,7 +189,7 @@ function sendLoginStatus(connection, status) {
 function updateUserPosition(username, posX, posY, direction = 'idle') {
   // Update DATABASE
   usersRef.child(`${username}/position`).set({posX:posX, posY:posY}); 
-  usersRef.child(`${username}/direction`).set({direction:direction}); 
+  usersRef.child(`${username}/direction`).set(direction); 
 
   // Broadcast to all users the new position of the user
   let data = {author: username, posX, posY, direction};
