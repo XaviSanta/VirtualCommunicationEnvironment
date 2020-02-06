@@ -1,3 +1,5 @@
+
+
 $('#initial-screen').css('display', 'none');
 connection.onmessage = (msg) => manageConnectionMesssage(msg);
 connection.onerror = (err) => manageConnectionError(err);
@@ -23,7 +25,19 @@ function manageConnectionMesssage(msg) {
   console.log('received obj', obj);
 
   if(obj.type === 'positions') {
+   
+   
+   
+   if (positions.length < 1 || Array.isArray(positions)) {
+     lastPositions = obj.data;
+   }
+    
+   else {
+    lastPositions = positions;
+   }
+    
     positions = obj.data;
+    draw();
   }
 
   if(obj.type === 'message') {
@@ -35,10 +49,22 @@ function manageConnectionMesssage(msg) {
     let author = obj.data.author;
     let posX = obj.data.posX;
     let posY = obj.data.posY;
-    let dir = obj.data.direction;
+    
+    // let lastPosX = 1;
+    // let lastPosY = 1;
 
-    positions[author] = {posX, posY, dir};
-    console.log('Updatedpositions', positions);
+    if (positions.length < 1 || Array.isArray(positions)) {
+       lastPositions = {posX, posY};
+     }
+      
+     else {
+      lastPositions[author] = positions[author];
+     }
+
+    
+    positions[author] = {posX, posY};
+    
+    draw();
   }
 
   if(obj.type === 'closeConnection') {
