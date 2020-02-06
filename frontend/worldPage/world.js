@@ -24,21 +24,26 @@ function manageConnectionMesssage(msg) {
   var obj = JSON.parse(msg.data);
   console.log('received obj', obj);
 
-  if(obj.type === 'positions') {
-    if (positions.length < 1 || Array.isArray(positions)) {
-      lastPositions = obj.data;
-    }
-    else {
-      lastPositions = positions;
-    }
-    positions = obj.data;
+  if(obj.type == 'positions') {
+
+       if (Query.isEmptyObject(lastPositions)) {
+         lastPositions = obj.data;
+       }
+        
+       else {
+        lastPositions = positions;
+       }
+        positions = obj.data;
+        
   }
 
-  if(obj.type === 'message') {
+  if(obj.type == 'message') {
     appendMessage(obj.data);
   }
 
-  if(obj.type === 'position') {
+  if(obj.type == 'position') {
+
+
     // Update the user position with the new data
     let author = obj.data.author;
     let posX =   obj.data.posX;
@@ -47,18 +52,22 @@ function manageConnectionMesssage(msg) {
     // let lastPosX = 1;
     // let lastPosY = 1;
 
-    if (positions.length < 1 || Array.isArray(positions)) {
-      lastPositions = {posX, posY};
-      console.log('hrllooooo', lastPositions);
-    }
-    else {
-      lastPositions[author] = positions[author];
-    }
 
+     if (jQuery.isEmptyObject(lastPositions)) {
+
+       lastPositions[author] = {posX, posY};
+     }
+      
+     else {
+      lastPositions[author] = positions[author];
+     }
+
+    
     positions[author] = {posX, posY};
+    
   }
 
-  if(obj.type === 'closeConnection') {
+  if(obj.type == 'closeConnection') {
     // Remove user from the object position se we stop drawing him on the canvas
     let username = obj.data;
     delete positions[username];
