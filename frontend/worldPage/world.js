@@ -1,5 +1,3 @@
-
-
 $('#initial-screen').css('display', 'none');
 connection.onmessage = (msg) => manageConnectionMesssage(msg);
 connection.onerror = (err) => manageConnectionError(err);
@@ -21,26 +19,26 @@ function sendInputMessage() {
 }
 
 function manageConnectionMesssage(msg) {
-  var obj = JSON.parse(msg.data);
+  let obj = JSON.parse(msg.data);
   console.log('received obj', obj);
 
-  if(obj.type == 'positions') {
-
-       if (jQuery.isEmptyObject(lastPositions)) {
-         lastPositions = obj.data;
-         positions = obj.data;
-       }else {
-        lastPositions = positions;
-       }
-        positions = obj.data;
-        draw();
+  if(obj.type === 'positions') {
+    //if he just entred we deep copy the obj.data to lastPositions to initialize it.
+    if (jQuery.isEmptyObject(lastPositions)) {
+     lastPositions = $.extend(true,{},obj.data);
+    //when the server sends a positions save the previous positions in lastpositions the copy the new positions in positions
+    } else {
+      lastPositions = $.extend(true,{},positions);
+    }
+    positions = obj.data;
+      
   }
 
-  if(obj.type == 'message') {
+  if(obj.type === 'message') {
     appendMessage(obj.data);
   }
 
-  if(obj.type == 'position') {
+  if(obj.type === 'position') {
 
 
     // Update the user position with the new data
@@ -48,31 +46,28 @@ function manageConnectionMesssage(msg) {
     let posX =   obj.data.posX;
     let posY =   obj.data.posY;
     
-    // let lastPosX = 1;
-    // let lastPosY = 1;
-
-     console.log('check', jQuery.isEmptyObject(lastPositions));
-
-     if (jQuery.isEmptyObject(lastPositions)) {
-       positions[author] = {posX, posY};
+   //Check if the user has lastposition or not and fill it 
+    if (jQuery.isEmptyObject(lastPositions) || jQuery.isEmptyObject(positions[author])) {
+       positions[author] ={posX, posY};
        lastPositions[author] = {posX, posY};
-     }else {
+     } else {
+    //copy the current user position to lastPositions then fill positions with incoming positios data 
       lastPositions[author] = {posX:positions[author].posX, posY:positions[author].posY};
-      console.log('lastPositions', lastPositions);
     }
-
     
     positions[author] = {posX, posY};
-    console.log('Positions', positions[author]);
-    draw();
+
+  
   }
 
-  if(obj.type == 'closeConnection') {
+  if(obj.type === 'closeConnection') {
     // Remove user from the object position se we stop drawing him on the canvas
     let username = obj.data;
     delete positions[username];
   }
 
+  //Call draw function only if we recieve a message to save cpu of client
+  draw();
   
 }
 
