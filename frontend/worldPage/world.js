@@ -26,7 +26,7 @@ function manageConnectionMesssage(msg) {
 
   if(obj.type == 'positions') {
 
-       if (Query.isEmptyObject(lastPositions)) {
+       if (juery.isEmptyObject(lastPositions)) {
          lastPositions = obj.data;
        }
         
