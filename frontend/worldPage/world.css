@@ -190,6 +190,6 @@ footer {
     height: 100px;
   }
   #write-message, .message-list-container, header, i{
-    font-size: 150%;
+    font-size: 200%;
   }
 }

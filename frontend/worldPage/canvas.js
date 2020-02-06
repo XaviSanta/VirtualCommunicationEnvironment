@@ -1,7 +1,7 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext("2d");
-
-
+var floorImage = new Image();
+floorImage.src = '../images/floor.png';
 var person = new Image();
 person.src = '../images/man1-spritesheet.png';
 characters = [
@@ -26,11 +26,10 @@ var talking = [16,17];
 
 
 //var points = [0]; 
-var u  = 0;
+var u = 0;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 
 // Send new coordinates of the user move
 canvas.addEventListener('click', function(e) {
@@ -41,74 +40,70 @@ canvas.addEventListener('click', function(e) {
 });
 
 async function animate(points,userNames,lock) {
-        let locked = flag;
-        var x=[];
-        var y=[];
+  let locked = flag;
+  var x=[];
+  var y=[];
 
-        var calcDirectionX;
-        var calcDirectionY;
-      
-        var anim; 
-        var parent;
-        var rect;
-        var direCoef = 0;
-          // TODO: If user is moving;
+  var calcDirectionX;
+  var calcDirectionY;
 
-        console.log('x:',userNames.length);
-          parent = canvas.parentNode;
-          rect = parent.getBoundingClientRect();
-          canvas.width = rect.width;
-          canvas.height = rect.height;
-        for(var i =0; i < userNames.length;  i++){
+  var anim; 
+  var parent;
+  var rect;
+  var direCoef = 0;
+  // TODO: If user is moving;
 
-          x[i] = points[i][currentFrame].x;
-          y[i] = points[i][currentFrame].y;
-        
-          
-          calcDirectionX = points[i][60].x - x[i];
-          calcDirectionY = points[i][60].y - y[i];
-          
-          if (calcDirectionX > 0) {
-             direCoef = 0;
-          }
-          if (calcDirectionX < 0) {
-            direCoef = 2;
-          }
-          if (calcDirectionY > 0 && (calcDirectionY > Math.abs(calcDirectionX)) ) {
-            direCoef = 1;
-          }
-          if (calcDirectionY < 0  && (Math.abs(calcDirectionY) > Math.abs(calcDirectionX))) {
-            direCoef = 3;
-          }
+  console.log('x:',userNames.length);
+  parent = canvas.parentNode;
+  rect = parent.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 
-          console.log('calc:',currentFrame);
-          anim = walking.map(x => x + 16 * direCoef );
-          
-          if (currentFrame == 60 || (calcDirectionX == 0 && calcDirectionY ==0)) {
-             anim = idle;
-          }
-          
-          
-          
+  for(var i =0; i < userNames.length;  i++){
+    x[i] = points[i][currentFrame].x;
+    y[i] = points[i][currentFrame].y;
+    
+    calcDirectionX = points[i][60].x - x[i];
+    calcDirectionY = points[i][60].y - y[i];
+    
+    if (calcDirectionX > 0) {
+      direCoef = 0;
+    }
+    if (calcDirectionX < 0) {
+      direCoef = 2;
+    }
+    if (calcDirectionY > 0 && (calcDirectionY > Math.abs(calcDirectionX)) ) {
+      direCoef = 1;
+    }
+    if (calcDirectionY < 0  && (Math.abs(calcDirectionY) > Math.abs(calcDirectionX))) {
+      direCoef = 3;
+    }
 
-          console.log('x:',x[i]);
-          
-          
-          renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
-             // Draw Username
-          ctx.textAlign = 'center';
-          ctx.fillText(userNames[i], x[i], y[i] - 0.3*h);
+    console.log('calc:',currentFrame);
+    anim = walking.map(x => x + 16 * direCoef );
+    
+    if (currentFrame == 60 || (calcDirectionX == 0 && calcDirectionY ==0)) {
+        anim = idle;
+    }
 
-          // Draw last Message
-          ctx.fillText(messageUser[userNames[i]] || '', x[i], y[i] - 2*h);
-      
-        }
-          
-          currentFrame++;
-          if (currentFrame < 61 && lock === flag) {
-            await sleep(10);
-            animate(points,userNames,locked);
-          }
+    console.log('x:',x[i]);
+    
+    renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
+    
+    // Draw Username
+    ctx.textAlign = 'center';
+    ctx.fillText(userNames[i], x[i], y[i] - 0.3*h);
+
+    // Draw last Message
+    ctx.fillText(messageUser[userNames[i]] || '', x[i], y[i] - 2*h);
+
+  }
+    
+  currentFrame++;
+  if (currentFrame < 61 && lock === flag) {
+    await sleep(10);
+    animate(points,userNames,locked);
+  }
           
 }
 
@@ -126,17 +121,14 @@ function loop() {
 loop();
     
 //start loop
-
-
 function draw() {
-  
   currentFrame = 0;
   var parent = canvas.parentNode;
   var rect = parent.getBoundingClientRect();
   canvas.width = rect.width;
   canvas.height = rect.height;
   // TODO: draw the 'floor'
-
+  drawFloor();
   drawUsers();
 }
 
@@ -147,21 +139,28 @@ function update() {
 }
 
 // -------------------------------------------------------------------------------
+function drawFloor() {
+  let widthImage = 256;
+  let heightImage = 256;
+  for(let i = 0; i < canvas.width/widthImage; i++)
+    for(let j = 0; j < canvas.height/heightImage; j++) 
+      ctx.drawImage( floorImage, 256*i, 256*j);
+}
 
 function drawUsers() {
-
-  var i =0;
+  var i = 0;
   var points = [];
   var userNames =[];
   users = Object.keys(positions);
   users.forEach(u => {   
-      points[i] = linePoints(lastPositions[u].posX, lastPositions[u].posY, positions[u].posX, positions[u].posY, 60);
-      lastPositions[u].posX =positions[u].posX;
-      lastPositions[u].posY =positions[u].posY;
-      console.log('x:',points[i]);
-      userNames[i] = u;
-      i++;  
+    points[i] = linePoints(lastPositions[u].posX, lastPositions[u].posY, positions[u].posX, positions[u].posY, 60);
+    lastPositions[u].posX = positions[u].posX;
+    lastPositions[u].posY = positions[u].posY;
+    console.log('x:',points[i]);
+    userNames[i] = u;
+    i++;  
   });
+
   flag = !flag;
   animate(points,userNames,flag);
 }

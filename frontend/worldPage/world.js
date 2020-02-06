@@ -25,17 +25,13 @@ function manageConnectionMesssage(msg) {
   console.log('received obj', obj);
 
   if(obj.type === 'positions') {
-   
-   if (positions.length < 1 || Array.isArray(positions)) {
-     lastPositions = obj.data;
-     
-   }
-    
-   else {
-    lastPositions = positions;
-   }
+    if (positions.length < 1 || Array.isArray(positions)) {
+      lastPositions = obj.data;
+    }
+    else {
+      lastPositions = positions;
+    }
     positions = obj.data;
-    
   }
 
   if(obj.type === 'message') {
@@ -43,8 +39,6 @@ function manageConnectionMesssage(msg) {
   }
 
   if(obj.type === 'position') {
-
-
     // Update the user position with the new data
     let author = obj.data.author;
     let posX =   obj.data.posX;
@@ -54,17 +48,14 @@ function manageConnectionMesssage(msg) {
     // let lastPosY = 1;
 
     if (positions.length < 1 || Array.isArray(positions)) {
-       lastPositions = {posX, posY};
-       console.log('hrllooooo', lastPositions);
-     }
-      
-     else {
+      lastPositions = {posX, posY};
+      console.log('hrllooooo', lastPositions);
+    }
+    else {
       lastPositions[author] = positions[author];
-     }
+    }
 
-    
     positions[author] = {posX, posY};
-    
   }
 
   if(obj.type === 'closeConnection') {
