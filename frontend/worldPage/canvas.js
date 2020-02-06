@@ -17,7 +17,7 @@ characters = [
 
 var w = 32; //sprite width
 var h = 64; //sprite height
-var idle = [32];
+var idle = [16];
 var walking = [2,3,4,5,6,7,8,9];
 var currentFrame = 0;
 var flag = false;
@@ -44,8 +44,7 @@ async function animate(points,userNames,lock) {
         let locked = flag;
         var x=[];
         var y=[];
-        var destX=[];
-        var destY=[];
+
         var calcDirectionX;
         var calcDirectionY;
       
@@ -54,9 +53,6 @@ async function animate(points,userNames,lock) {
         var rect;
         var direCoef = 0;
           // TODO: If user is moving;
- 
-
-  
 
         console.log('x:',userNames.length);
           parent = canvas.parentNode;
@@ -67,29 +63,38 @@ async function animate(points,userNames,lock) {
 
           x[i] = points[i][currentFrame].x;
           y[i] = points[i][currentFrame].y;
-          
-          destX[i] = points[i][60].x;
-          destY[i] = points[i][60].y;
+        
           
           calcDirectionX = points[i][60].x - x[i];
           calcDirectionY = points[i][60].y - y[i];
-
+          
           if (calcDirectionX > 0) {
              direCoef = 0;
           }
           if (calcDirectionX < 0) {
             direCoef = 2;
           }
+          if (calcDirectionY > 0 && (calcDirectionY > Math.abs(calcDirectionX)) ) {
+            direCoef = 1;
+          }
+          if (calcDirectionY < 0  && (Math.abs(calcDirectionY) > Math.abs(calcDirectionX))) {
+            direCoef = 3;
+          }
 
+          console.log('calc:',currentFrame);
+          anim = walking.map(x => x + 16 * direCoef );
+          
+          if (currentFrame == 60) {
+             anim = idle;
+          }
           
           
-          anim =idle;
-          //anim = walking.map(x => x[i] + 16 * 16 );
           
+
           console.log('x:',x[i]);
           
           
-          renderAnimation(ctx, person, walking, x[i]-w, y[i] - 2*h, 1.5, 0, false);
+          renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
              // Draw Username
           ctx.textAlign = 'center';
           ctx.fillText(userNames[i], x[i], y[i] - 0.3*h);
@@ -142,6 +147,7 @@ function update() {
 }
 
 // -------------------------------------------------------------------------------
+
 function drawUsers() {
 
   var i =0;
