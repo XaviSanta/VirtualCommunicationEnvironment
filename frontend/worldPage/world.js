@@ -22,7 +22,7 @@ function sendInputMessage() {
 
 function manageConnectionMesssage(msg) {
   var obj = JSON.parse(msg.data);
-  console.log('received obj', obj);
+  // console.log('received obj', obj);
 
   if(obj.type === 'positions') {
     if (positions.length < 1 || Array.isArray(positions)) {

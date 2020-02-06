@@ -18,7 +18,7 @@ var idle = [16];
 var talking = [16,17];
 var walking = [2,3,4,5,6,7,8,9];
 var currentFrame = 0;
-var points;
+var points = 1;
 var lastX = 0;
 var lastY = 0;
 
@@ -26,8 +26,10 @@ var lastY = 0;
 canvas.addEventListener('click', function(e) {
   lastX = positions[username].posX;
   lastY = positions[username].posY;
-
-  points = linePoints(lastX, lastY, e.clientX, e.clientY, 60);
+  numPoints = Math.round(Math.max(Math.abs(lastX - e.clientX), Math.abs(lastY - e.clientY)));
+  // numPoints = 60;
+  console.log(numPoints);
+  points = linePoints(lastX, lastY, e.clientX, e.clientY, numPoints);
   currentFrame = 0;
   
   lastX = e.clientX;
@@ -44,19 +46,19 @@ function animate() {
   connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y, direction: dir}));
 
   // refire the timer until out-of-points
-  if (currentFrame < points.length) {
-      timer = setTimeout(animate, 1000 / 60);
+  if (currentFrame < numPoints) {
+      timer = setTimeout(animate, 1000 / numPoints);
   }
 
   // Send that the user has stopped
-  if(currentFrame == points.length) {
+  if(currentFrame === numPoints) {
     connection.send(JSON.stringify({type: 'position', posX: point.x, posY: point.y, direction: 'idle'}));
   }
 }
 
 function calculateDirection() {
   let init = points[0];
-  let end = points[60];
+  let end = points[numPoints];
   let dx = init.x - end.x;
   let dy = init.y - end.y;
 
