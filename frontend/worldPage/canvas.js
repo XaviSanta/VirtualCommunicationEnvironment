@@ -84,7 +84,7 @@ async function animate(points,userNames,lock) {
           console.log('calc:',currentFrame);
           anim = walking.map(x => x + 16 * direCoef );
           
-          if (currentFrame == 60) {
+          if (currentFrame == 60 || (calcDirectionX == 0 && calcDirectionY ==0) {
              anim = idle;
           }
           
