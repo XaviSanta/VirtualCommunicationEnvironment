@@ -43,19 +43,16 @@ function manageConnectionMesssage(msg) {
     let author = obj.data.author;
     let posX =   obj.data.posX;
     let posY =   obj.data.posY;
-    
-    // let lastPosX = 1;
-    // let lastPosY = 1;
+    let dir  =   obj.data.direction;
 
     if (positions.length < 1 || Array.isArray(positions)) {
-      lastPositions = {posX, posY};
-      console.log('hrllooooo', lastPositions);
+      lastPositions = {posX, posY, dir};
     }
     else {
       lastPositions[author] = positions[author];
     }
 
-    positions[author] = {posX, posY};
+    positions[author] = {posX, posY, dir};
   }
 
   if(obj.type === 'closeConnection') {
