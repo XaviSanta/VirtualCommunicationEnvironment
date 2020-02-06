@@ -4,6 +4,8 @@ var ctx = canvas.getContext("2d");
 
 var person = new Image();
 person.src = '../images/man1-spritesheet.png';
+var floorImage = new Image();
+floorImage.src = '../images/floor.png';
 characters = [
   '../images/man1-spritesheet.png', 
   '../images/man2-spritesheet.png', 
@@ -25,7 +27,8 @@ var flag = false;
 var talking = [16,17];
 
 
-//var points = [0]; 
+
+
 var u  = 0;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -59,7 +62,14 @@ async function animate(points,userNames,lock,currentFrame) {
         rect = parent.getBoundingClientRect();
         canvas.width = rect.width;
         canvas.height = rect.height;
+        let widthImage = 256;
+        let heightImage=256;
+      
+       for(let i = 0; i < canvas.width/widthImage; i++)
+        for(let j = 0; j < canvas.height/heightImage; j++)
+          ctx.drawImage(floorImage, 256*i, 256*j);
 
+          
         // in each iteration print all users position 
         for(var i =0; i < userNames.length;  i++){
 
@@ -101,10 +111,18 @@ async function animate(points,userNames,lock,currentFrame) {
           renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
              // Draw Username
           ctx.textAlign = 'center';
-          ctx.fillText(userNames[i], x[i], y[i] - 0.3*h);
+          ctx.font = "17px Comic Sans MS";
+          ctx.fillStyle = "white";
+          ctx.fillText(userNames[i], x[i]-10, y[i] - 0.3*h);
+          
 
+          
+          //ctx.drawImage(image, dx, dy, dWidth, dHeight);
           // Draw last Message
-          ctx.fillText(messageUser[userNames[i]] || '', x[i], y[i] - 2*h);
+          ctx.textAlign = 'center';
+          ctx.font = "15px Comic Sans MS";
+          ctx.fillStyle = "white";
+          ctx.fillText(messageUser[userNames[i]] || '', x[i]-10, y[i] - 2*h);
       
         }
           //Go to the next point from 60 points and print all users at that point 
@@ -228,5 +246,7 @@ function renderFrame(ctx, image, frame, x, y, scale, flip) {
     ctx.scale(-1,1);
   }
   ctx.drawImage( image, xf,yf,w,h, 0,0,w*scale,h*scale );
+ 
+
   ctx.restore();
 }
