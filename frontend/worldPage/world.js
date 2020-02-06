@@ -26,15 +26,14 @@ function manageConnectionMesssage(msg) {
 
   if(obj.type == 'positions') {
 
-       if (juery.isEmptyObject(lastPositions)) {
+       if (jQuery.isEmptyObject(lastPositions)) {
          lastPositions = obj.data;
-       }
-        
-       else {
+         positions = obj.data;
+       }else {
         lastPositions = positions;
        }
         positions = obj.data;
-        
+        draw();
   }
 
   if(obj.type == 'message') {
@@ -52,19 +51,20 @@ function manageConnectionMesssage(msg) {
     // let lastPosX = 1;
     // let lastPosY = 1;
 
+     console.log('check', jQuery.isEmptyObject(lastPositions));
 
      if (jQuery.isEmptyObject(lastPositions)) {
-
+       positions[author] = {posX, posY};
        lastPositions[author] = {posX, posY};
-     }
-      
-     else {
-      lastPositions[author] = positions[author];
-     }
+     }else {
+      lastPositions[author] = {posX:positions[author].posX, posY:positions[author].posY};
+      console.log('lastPositions', lastPositions);
+    }
 
     
     positions[author] = {posX, posY};
-    
+    console.log('Positions', positions[author]);
+    draw();
   }
 
   if(obj.type == 'closeConnection') {
@@ -73,7 +73,7 @@ function manageConnectionMesssage(msg) {
     delete positions[username];
   }
 
-  draw();
+  
 }
 
 function manageConnectionError(err) {
