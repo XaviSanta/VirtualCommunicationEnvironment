@@ -26,18 +26,16 @@ function manageConnectionMesssage(msg) {
 
   if(obj.type === 'positions') {
    
-   
-   
    if (positions.length < 1 || Array.isArray(positions)) {
      lastPositions = obj.data;
+     
    }
     
    else {
     lastPositions = positions;
    }
-    
     positions = obj.data;
-    draw();
+    
   }
 
   if(obj.type === 'message') {
@@ -45,16 +43,19 @@ function manageConnectionMesssage(msg) {
   }
 
   if(obj.type === 'position') {
+
+
     // Update the user position with the new data
     let author = obj.data.author;
-    let posX = obj.data.posX;
-    let posY = obj.data.posY;
+    let posX =   obj.data.posX;
+    let posY =   obj.data.posY;
     
     // let lastPosX = 1;
     // let lastPosY = 1;
 
     if (positions.length < 1 || Array.isArray(positions)) {
        lastPositions = {posX, posY};
+       console.log('hrllooooo', lastPositions);
      }
       
      else {
@@ -64,7 +65,6 @@ function manageConnectionMesssage(msg) {
     
     positions[author] = {posX, posY};
     
-    draw();
   }
 
   if(obj.type === 'closeConnection') {
@@ -72,6 +72,8 @@ function manageConnectionMesssage(msg) {
     let username = obj.data;
     delete positions[username];
   }
+
+  draw();
 }
 
 function manageConnectionError(err) {
