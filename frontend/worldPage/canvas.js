@@ -44,34 +44,34 @@ canvas.addEventListener('click', function(e) {
 });
 
 async function animate(points,userNames,lock,currentFrame) {
-        // lock function with flag to stop current animate function if it called again
-        let locked = flag;
+// lock function with flag to stop current animate function if it called again
+  let locked = flag;
         
-        var x=[];
-        var y=[];
+  var x=[];
+  var y=[];
 
-        var calcDirectionX;
-        var calcDirectionY;
+  var calcDirectionX;
+  var calcDirectionY;
       
-        var anim; 
-        var parent;
-        var rect;
-        var direCoef = 0;
+  var anim; 
+  var parent;
+  var rect;
+  var direCoef = 0;
 
-        parent = canvas.parentNode;
-        rect = parent.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        let widthImage = 256;
-        let heightImage=256;
+  parent = canvas.parentNode;
+  rect = parent.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  let widthImage = 256;
+  let heightImage=256;
       
-       for(let i = 0; i < canvas.width/widthImage; i++)
-        for(let j = 0; j < canvas.height/heightImage; j++)
-          ctx.drawImage(floorImage, 256*i, 256*j);
+  for(let i = 0; i < canvas.width/widthImage; i++)
+    for(let j = 0; j < canvas.height/heightImage; j++)
+      ctx.drawImage(floorImage, 256*i, 256*j);
 
           
-        // in each iteration print all users position 
-        for(var i =0; i < userNames.length;  i++){
+  // in each iteration print all users position 
+      for(var i =0; i < userNames.length;  i++){
 
           x[i] = points[i][currentFrame].x;
           y[i] = points[i][currentFrame].y;
@@ -106,31 +106,28 @@ async function animate(points,userNames,lock,currentFrame) {
           
           
 
-          
-          
-          renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
-             // Draw Username
-          ctx.textAlign = 'center';
-          ctx.font = "17px Comic Sans MS";
-          ctx.fillStyle = "white";
-          ctx.fillText(userNames[i], x[i]-10, y[i] - 0.3*h);
-          
+  renderAnimation(ctx, person, anim, x[i]-w, y[i] - 2*h, 1.5, 0, false);
+  // Draw Username
+  ctx.textAlign = 'center';
+  ctx.font = "17px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.fillText(userNames[i], x[i]-10, y[i] - 0.3*h);
 
-          
-          //ctx.drawImage(image, dx, dy, dWidth, dHeight);
-          // Draw last Message
-          ctx.textAlign = 'center';
-          ctx.font = "15px Comic Sans MS";
-          ctx.fillStyle = "white";
-          ctx.fillText(messageUser[userNames[i]] || '', x[i]-10, y[i] - 2*h);
+        
+  //ctx.drawImage(image, dx, dy, dWidth, dHeight);
+  // Draw last Message
+  ctx.textAlign = 'center';
+  ctx.font = "15px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.fillText(messageUser[userNames[i]] || '', x[i]-10, y[i] - 2*h);
       
-        }
-          //Go to the next point from 60 points and print all users at that point 
-          currentFrame++;
-          if (currentFrame < 61 && lock === flag) {
-            await sleep(10);
-            animate(points,userNames,locked,currentFrame);
-          }
+  }
+  //Go to the next point from 60 points and print all users at that point 
+  currentFrame++;
+  if (currentFrame < 61 && lock === flag) {
+    await sleep(10);
+    animate(points,userNames,locked,currentFrame);
+    }
           
 }
 
