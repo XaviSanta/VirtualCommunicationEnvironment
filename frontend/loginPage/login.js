@@ -10,8 +10,8 @@ function login() {
     return false;
   }
 
-  connection = new WebSocket('wss://ecv-etic.upf.edu/node/9034/ws/');
-  // connection = new WebSocket('ws://127.0.0.1:9034');
+  // connection = new WebSocket('wss://ecv-etic.upf.edu/node/9034/ws/');
+  connection = new WebSocket('ws://127.0.0.1:9034');
   
   connection.onopen = () => {
     console.log('Connection is open and ready to use');
