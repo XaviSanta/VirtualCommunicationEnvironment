@@ -82,11 +82,6 @@ wsServer.on('request', (req) => {
 
     // Remove user from the list
     connections.splice(index, 1);
-
-    // Notify users
-    connections.forEach(u => {
-      u.sendUTF(JSON.stringify({type: 'closeConnection', data: username}));
-    });
   });
 });
 
@@ -176,6 +171,12 @@ function savePasswordInDB(username, password) {
 
 function setUserIsConnected(username, connected) {
   usersRef.child(`${username}/connected`).set(connected);
+
+  // Broadcast
+  let type = connected ? 'newConnection' : 'closeConnection';
+  connections.forEach(u => {
+    u.sendUTF(JSON.stringify({type: type, data: username}));
+  });
 }
 
 function sendAllPositionsToUser(connection) {

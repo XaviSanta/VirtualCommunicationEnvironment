@@ -2,6 +2,7 @@ var connection;
 var username;
 var positions = {};
 var lastPositions = {};
+
 function login() {
   username = $('#username').val();
   var password = $('#password').val();
