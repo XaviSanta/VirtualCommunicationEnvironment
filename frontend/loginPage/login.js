@@ -23,6 +23,7 @@ function login() {
   
   connection.onerror = (err) => {
     console.log('An error ocurred', err);
+    alert('An error ocurred, refresh the page');
   }; 
   
   connection.onmessage = (msg) => {
@@ -30,7 +31,7 @@ function login() {
 
     switch (obj.type) {
       case 'LoginOK':
-        console.log('LoginStatus: ✅', obj );
+        console.log('LoginStatus: Success', obj );
         $('.world').load('../worldPage/world.html');
 
         // Ask for positions, the timeout is because i couldnt pass the variable positions
@@ -41,7 +42,7 @@ function login() {
 
       // TODO
       case 'LoginWRONG':
-        alert('Wrong password: ❌' );
+        alert('Wrong password' );
 
       default:
         break;

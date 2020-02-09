@@ -1,27 +1,16 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext("2d");
-var person = new Image();
-person.src = '../images/man1-spritesheet.png';
 var floorImage = new Image();
 floorImage.src = '../images/floor.png';
-characters = [
-  '../images/man1-spritesheet.png',
-  '../images/man2-spritesheet.png',
-  '../images/man3-spritesheet.png',
-  '../images/man4-spritesheet.png',
-  '../images/woman1-spritesheet.png',
-  '../images/woman2-spritesheet.png',
-  '../images/woman3-spritesheet.png',
-  '../images/woman4-spritesheet.png',
-];
+var characters = getCharacters();
 
 var w = 32; //sprite width
 var h = 64; //sprite height
 var idle = [16];
 var walking = [2, 3, 4, 5, 6, 7, 8, 9];
 var flag = false;
-var talking = [16, 17];
-var numFrames = 100;
+var talking = [16, 17]; // TODO: implement
+var numFrames = 60;
 
 // Send new coordinates of the user move
 canvas.addEventListener('click', function (e) {
@@ -56,12 +45,12 @@ function drawUsers() {
   animate(flag, 0);
 }
 
-// This function is called 60 times when we receive a message
+// This function is called 'numFrames' times when we receive a message
 async function animate(lock, currentFrame) {
   resizeCanvas();
   drawFloor();
-  drawNumConnections();
   printAllUsersPosition(currentFrame);
+  drawNumConnections();
   
   //Go to the next point from 'numFrames' points and print all users at that point 
   currentFrame++;
@@ -106,7 +95,8 @@ function printAllUsersPosition(currentFrame) {
 
     //Calculate the diffrence in X and Y axis to know the direction
     var anim = getAnimation(x, y, points, currentFrame);
-    renderAnimation(ctx, person, anim, x - w, y - 2 * h, 1.5, 0, false);
+    // Get randomly the skin, TODO: get it from the server
+    renderAnimation(ctx, characters[u.length%characters.length], anim, x - w, y - 2 * h, 1.5, 0, false);
     
     drawName(u, x, y);
     drawLastMessage(u, x, y);
@@ -216,4 +206,27 @@ function renderFrame(ctx, image, frame, x, y, scale, flip) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getCharacters() {
+  var person1 = new Image();
+  var person2 = new Image();
+  var person3 = new Image();
+  var person4 = new Image();
+  var person5 = new Image();
+  var person6 = new Image();
+  var person7 = new Image();
+  var person8 = new Image();
+  person1.src = '../images/man1-spritesheet.png';
+  person2.src = '../images/man2-spritesheet.png';
+  person3.src = '../images/man3-spritesheet.png';
+  person4.src = '../images/man4-spritesheet.png';
+  person5.src = '../images/woman1-spritesheet.png';
+  person6.src = '../images/woman2-spritesheet.png';
+  person7.src = '../images/woman3-spritesheet.png';
+  person8.src = '../images/woman4-spritesheet.png';
+  characters = [
+    person1, person8, person2, person7, person3, person6, person4, person5,
+  ];
+  return characters;
 }

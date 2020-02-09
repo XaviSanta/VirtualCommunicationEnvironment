@@ -53,9 +53,6 @@ section:after {
   clear: both;
 }
 
-
-
-
 /*///////////////////////////////////// MESSAGE LIST /////////////////////////////////// */
 .message-list-container {
   background: rgb(2,0,36);
@@ -137,7 +134,7 @@ footer {
   text-align: center;
   color: white;
   position: fixed;
-  bottom: 0;
+  bottom: 2;
   width: 100%;
 }
 

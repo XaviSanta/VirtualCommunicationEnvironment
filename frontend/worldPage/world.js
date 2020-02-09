@@ -68,7 +68,6 @@ function manageConnectionMesssage(msg) {
 
   if (obj.type === 'newConnection') {
     appendNotification(obj.data, 'joined');
-    console.log("Hola");
   }
 
   if (obj.type === 'closeConnection') {
