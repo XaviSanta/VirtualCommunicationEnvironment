@@ -114,9 +114,4 @@ Canvas.js:
 	animate(): we set it as an asynchronous function to avoid the stop that can happens to the code during the execution of this function. It contains a lock parameter to stop the current execution of the running animate function when it is called again. This function will call itself 60 times based on numFrames which we have set it in 60 and each time it will sleep for 10ms, in each time when it calls itself it will clear the canvas, draw the floor, print all user position at that frame and draw the number of connections. 
 
 
-
-
-
-
-
-
+https://github.com/XaviSanta/VirtualCommunicationEnvironment
