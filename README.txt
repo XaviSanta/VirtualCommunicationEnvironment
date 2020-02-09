@@ -23,7 +23,7 @@ Database:
 		  - Users
 			|
 			+ Xavi
-				- connected: true
+				- connected: "true"
 				- lastMessage: “Hi”
 				- password: “123”
 				- position
