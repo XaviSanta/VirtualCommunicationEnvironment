@@ -135,20 +135,6 @@ function getUserPosition(username) {
   return {posX, posY};
 }
 
-function gotMessages(data) {
-  if(data.val() === null){
-    console.log('No messages');
-  }
-  else {
-    var messagesLog = data.val();
-    var keys = Object.keys(messages);
-    keys.forEach(k => {
-      // TODO: do something maybe
-      // console.log(messages[k]);
-    });
-  }
-}
-
 function saveMessage(obj) {
   var newMessageRef = messagesRef.push();
   newMessageRef.set(obj);
