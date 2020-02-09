@@ -61,7 +61,7 @@ wsServer.on('request', (req) => {
 
         // If its a position: Update DB of positions and broadcast to all connections
         case 'position':
-          updateUserPosition(username, msg.posX, msg.posY, msg.direction);
+          updateUserPosition(username, msg.posX, msg.posY);
 
           break;
         case 'getPositions':
@@ -197,13 +197,12 @@ function sendLoginStatus(connection, status) {
   connection.send(JSON.stringify({type: status}));
 }
 
-function updateUserPosition(username, posX, posY, direction = 'idle') {
+function updateUserPosition(username, posX, posY) {
   // Update DATABASE
   usersRef.child(`${username}/position`).set({posX:posX, posY:posY}); 
-  usersRef.child(`${username}/direction`).set(direction); 
 
   // Broadcast to all users the new position of the user
-  let data = {author: username, posX, posY, direction};
+  let data = {author: username, posX, posY};
   connections.forEach(u => {
     u.send(JSON.stringify({type: 'position', data}));
   });
