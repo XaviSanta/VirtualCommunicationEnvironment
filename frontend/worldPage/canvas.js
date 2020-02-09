@@ -99,7 +99,7 @@ function printAllUsersPosition(currentFrame) {
     //Calculate the diffrence in X and Y axis to know the direction
     var anim = getAnimation(x, y, points, currentFrame);
     // Get randomly the skin, TODO: get it from the server
-    renderAnimation(ctx, characters[u.length%characters.length], anim, x - w, y - 2 * h, 1.5, 0, false);
+    renderAnimation(ctx, characters[u.length%characters.length], anim, x - w, y - 2.5 * h, 2, 0, false);
     
     drawName(u, x, y);
     drawLastMessage(u, x, y);
@@ -180,16 +180,16 @@ function renderAnimation(ctx, image, anim, x, y, scale, offset, flip) {
 
 function drawName(u, x, y) {
   ctx.textAlign = 'center';
-  ctx.font = "17px Comic Sans MS";
+  ctx.font = "20px Comic Sans MS";
   ctx.fillStyle = "white";
-  ctx.fillText(u, x - 10, y - 0.3 * h);
+  ctx.fillText(u, x - 3, y - 15);
 }
 
 function drawLastMessage(u, x, y) {
   ctx.textAlign = 'center';
-  ctx.font = "15px Comic Sans MS";
+  ctx.font = "20px Comic Sans MS";
   ctx.fillStyle = "white";
-  ctx.fillText(messageUser[u] || '', x - 10, y - 2 * h);
+  ctx.fillText(messageUser[u] || '', x - 5, y - 2.5*h);
 }
 
 function renderFrame(ctx, image, frame, x, y, scale, flip) {
