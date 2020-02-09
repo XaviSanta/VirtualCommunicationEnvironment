@@ -9,12 +9,15 @@
     <link href="../worldPage/world.css" rel="stylesheet">
   </head>
   
-  <body onresize="draw()">
-    <header>Assignment 2</header>
+  <body>
+    <header>
+      Assignment 2
+      <button id="disconnect" onClick="location.reload()">Disconnect</button>
+    </header>
 
     <section>
       <div class="container-canvas">
-        <canvas id="myCanvas" onresize="draw()"></canvas>
+        <canvas id="myCanvas"></canvas>
       </div>
       
       <div class="message-list-container" id="container-messages" onclick="setFocusMessageInput()"></div>
