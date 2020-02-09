@@ -21,6 +21,9 @@ canvas.addEventListener('click', function (e) {
   }));
 });
 
+// It makes no blankspaces becuase the canvas is resized and draw it again
+window.onresize = function(){ draw(); }
+
 //draw() function is called only if we recieve a new message containing a position
 function draw() {
   drawUsers();

@@ -1,7 +1,5 @@
 var connection;
 var username;
-var positions = {};
-var lastPositions = {};
 
 function login() {
   username = $('#username').val();
@@ -33,11 +31,6 @@ function login() {
       case 'LoginOK':
         console.log('LoginStatus: Success', obj );
         $('.world').load('../worldPage/world.html');
-
-        // Ask for positions, the timeout is because i couldnt pass the variable positions
-        // and when i was reading the variable positions in world.js i was getting undefined
-        // so now when i receive the response, its in world, not in login
-        setTimeout(() => connection.send(JSON.stringify({type: 'getPositions'})), 1000);
         break;
 
       // TODO

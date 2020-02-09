@@ -18,7 +18,7 @@ var messagesRef = firebase.database().ref('messages');
 
 // When database is updated:
 usersRef.on('value', data => users = data.val());
-messagesRef.on('value', gotMessages);
+messagesRef.on('value', data => history = data.val());
 
 // Http server
 var server = http.createServer();
@@ -52,9 +52,7 @@ wsServer.on('request', (req) => {
         // If its a message: Log and send to all connections the message sent by the user
         case 'message':
           const obj = {author: username, content: msg.content};
-          
-          // Log 
-          history.push(obj);
+          // Save 
           saveMessage(obj);
 
           // Send
@@ -69,6 +67,9 @@ wsServer.on('request', (req) => {
         case 'getPositions':
           sendAllPositionsToUser(connection);
           break;
+
+        case 'getMessages':
+          sendAllMessagesToUser(connection);
         default:
           break;
       }
@@ -139,10 +140,10 @@ function gotMessages(data) {
     console.log('No messages');
   }
   else {
-    var messages = data.val();
+    var messagesLog = data.val();
     var keys = Object.keys(messages);
     keys.forEach(k => {
-      // TODO
+      // TODO: do something maybe
       // console.log(messages[k]);
     });
   }
@@ -162,7 +163,12 @@ function broadcastMessage(obj) {
 }
 
 function isUserRegistered(username) {
-  return users !== null && users[username] !== undefined;
+  try {
+    return users !== null && users[username] !== undefined;
+  } catch(e) {
+    console.log(e)
+  }
+  return false;
 }
 
 function savePasswordInDB(username, password) {
@@ -181,6 +187,10 @@ function setUserIsConnected(username, connected) {
 
 function sendAllPositionsToUser(connection) {
   connection.send(JSON.stringify({type: 'positions', data: getOnlinePositions()}));
+}
+
+function sendAllMessagesToUser(connection) {
+  connection.send(JSON.stringify({type: 'messagesLog', data: history}));
 }
 
 function sendLoginStatus(connection, status) {

@@ -1,3 +1,9 @@
+var positions = {}; 
+var lastPositions = {};
+
+connection.send(JSON.stringify({type: 'getPositions'}));
+connection.send(JSON.stringify({type: 'getMessages'}));
+
 $('#initial-screen').css('display', 'none');
 connection.onmessage = (msg) => manageConnectionMesssage(msg);
 connection.onerror = (err) => manageConnectionError(err);
@@ -40,6 +46,13 @@ function manageConnectionMesssage(msg) {
 
   if (obj.type === 'message') {
     appendMessage(obj.data);
+  }
+
+  if (obj.type === 'messagesLog' && obj.data !== null) {
+    var messagesLog = obj.data;
+    Object.keys(messagesLog).forEach(i => {
+      appendMessage(messagesLog[i]);
+    });
   }
 
   if (obj.type === 'position') {
