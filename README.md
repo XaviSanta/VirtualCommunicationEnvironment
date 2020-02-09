@@ -2,6 +2,7 @@
 Chat2
 
 Imane Khider 196341
+
 Xavier Santamaria 
 
 For this assigment we have improved the chat of the first assigment by creating our own server using node.js.
